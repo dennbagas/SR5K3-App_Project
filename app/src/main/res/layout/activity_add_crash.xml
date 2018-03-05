@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCrashActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_submit_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_navigation_check_24" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/tv_dateresult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/input_tanggal"
+                android:textColor="@color/primary_text" />
+
+            <EditText
+                android:id="@+id/tv_timeresult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_dateresult"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/waktu"
+                android:textColor="@color/primary_text" />
+
+            <EditText
+                android:id="@+id/field_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_timeresult"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/area"
+                android:maxLines="1"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/field_problem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_area"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/problem"
+                android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/field_cause"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/field_problem"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/cause"
+                android:inputType="textMultiLine"
+                android:maxLines="10" />
+
+            <EditText
+                android:id="@+id/field_action"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="false"
+                android:layout_below="@+id/field_cause"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="5dp"
+                android:cursorVisible="true"
+                android:hint="@string/action"
+                android:inputType="textMultiLine"
+                android:maxLines="10"
+                android:scrollHorizontally="false" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/field_action"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addPhoto"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/tambahkan_foto" />
+
+                <TextView
+                    android:id="@+id/fileName"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/textview" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
