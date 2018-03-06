@@ -151,21 +151,15 @@ public class AddAccidentsActivity extends BaseActivity {
     }
 
     private void onLaunchCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, 0);
-        }
+        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, 0);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                mPhoto.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            mPhoto.setImageBitmap(bitmap);
         }
     }
 
@@ -283,13 +277,12 @@ public class AddAccidentsActivity extends BaseActivity {
 
             StorageReference reference = mStorage.child(STORAGE_PATH + System.currentTimeMillis() + "." + getActualImage(imageUri));
             reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @SuppressWarnings("ConstantConditions")
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     String key = mDatabase.child("accidents").push().getKey();
                     //noinspection ConstantConditions
-                    @SuppressWarnings("ConstantConditions") AddAccidents addAccidents = new AddAccidents(nama, nik, bagian, kronologi, penanganan, tanggal, pukul, taskSnapshot.getDownloadUrl().toString(), atasan);
+                    AddAccidents addAccidents = new AddAccidents(nama, nik, bagian, kronologi, penanganan, tanggal, pukul, taskSnapshot.getDownloadUrl().toString(), atasan);
                     Map<String, Object> postValues = addAccidents.toMap();
 
                     Map<String, Object> childUpdates = new HashMap<>();
