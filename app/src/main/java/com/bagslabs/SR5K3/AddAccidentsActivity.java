@@ -24,15 +24,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.bagslabs.SR5K3.models.AddAccidents;
+import com.bagslabs.SR5K3.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +46,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class AddAccidentsActivity extends BaseActivity {
 
     private static final String TAG = "AddAccidentsActivity", REQUIRED = "Required";
@@ -57,6 +64,8 @@ public class AddAccidentsActivity extends BaseActivity {
     private TextView tvDateResult, tvTimeResult;
     Button mAddPhoto;
     ImageView mPhoto;
+
+    public static final String STORAGE_PATH = "images/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,71 +229,100 @@ public class AddAccidentsActivity extends BaseActivity {
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
+        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
+        final String userId = getUid();
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        User user = dataSnapshot.getValue(User.class);
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading");
-        progressDialog.show();
+                        // [START_EXCLUDE]
+                        if (user == null) {
+                            // User is null, error out
+                            Log.e(TAG, "User " + userId + " is unexpectedly null");
+                            Toast.makeText(AddAccidentsActivity.this,
+                                    "Error: could not fetch user.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            writeNewPost(nama, nik, bagian, krono, penanganan, tanggal, pukul, atasan);
+                            Log.e(TAG, "Success Posting");
+                        }
 
-        if (imageUri == null) {
-            // show message
-            Toast.makeText(getApplicationContext(), "Tambahkan Foto Terlebih Dahulu", Toast.LENGTH_LONG).show();
-        } else {
+                        // Finish this Activity, back to the stream
+                        setEditingEnabled(true);
+                        finish();
+                        // [END_EXCLUDE]
+                    }
 
-            StorageReference reference = mStorage.child("accident" + System.currentTimeMillis() + "." + getActualImage(imageUri));
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        setEditingEnabled(true);
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+
+    // [START write_fan_out]
+    private void writeNewPost(final String nama, final String nik, final String bagian, final String kronologi, final String penanganan, final String tanggal
+            , final String pukul, final String atasan) {
+        // Create new addAccidents at /user-posts/$userid/$postid and at
+        // /posts/$postid simultaneously
+
+        if(imageUri != null){
+            // insert data
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+            StorageReference reference = mStorage.child(STORAGE_PATH + System.currentTimeMillis() + "." + getActualImage(imageUri));
             reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @SuppressWarnings("ConstantConditions")
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    // Write new post
+                    String key = mDatabase.child("accidents").push().getKey();
                     //noinspection ConstantConditions
-                    writeNewPost(nama, nik, bagian, krono, penanganan, tanggal, pukul, taskSnapshot.getDownloadUrl().toString(), atasan);
-                    Log.e(TAG, "Success Posting");
+                    @SuppressWarnings("ConstantConditions") AddAccidents addAccidents = new AddAccidents(nama, nik, bagian, kronologi, penanganan, tanggal, pukul, taskSnapshot.getDownloadUrl().toString(), atasan);
+                    Map<String, Object> postValues = addAccidents.toMap();
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/accidents/" + key, postValues);
+
+                    mDatabase.updateChildren(childUpdates);
 
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "Success Posting.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Data uploaded",Toast.LENGTH_LONG).show();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+
                         }
                     })
-
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @SuppressWarnings("VisibleForTests")
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double totalProgress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            progressDialog.setMessage("Uploaded" + totalProgress + "%");
+                            double totalProgress = (100*taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage("Uploaded % " + (int)totalProgress);
                         }
                     });
 
 
-            // Finish this Activity, back to the stream
-            setEditingEnabled(true);
-
-            finish();
-            // [END_EXCLUDE]
+        } else {
+            // show message
+            Toast.makeText(getApplicationContext(),"Masukkan foto terlebih dahulu",Toast.LENGTH_LONG).show();
         }
-        // [END single_value_read]
-    }
-
-    // [START write_fan_out]
-    private void writeNewPost(String nama, String nik, String bagian, String kronologi, String penanganan, String tanggal
-            , String pukul, String imageUrl, String atasan) {
-        // Create new addAccidents at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-        String key = mDatabase.child("accidents").push().getKey();
-        AddAccidents addAccidents = new AddAccidents(nama, nik, bagian, kronologi, penanganan, tanggal, pukul, imageUrl, atasan);
-        Map<String, Object> postValues = addAccidents.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/accidents/" + key, postValues);
-
-        mDatabase.updateChildren(childUpdates);
     }
     // [END write_fan_out]
 

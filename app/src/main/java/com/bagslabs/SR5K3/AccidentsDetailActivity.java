@@ -77,7 +77,7 @@ public class AccidentsDetailActivity extends BaseActivity {
                     bagianView.setText(addAccidents.bagian);
                     kronologiView.setText(addAccidents.kronologi);
                     penangananView.setText(addAccidents.penanganan);
-                    imageString = addAccidents.imageEncoded;
+                    imageString = addAccidents.imageUri;
 
                     try {
                         imageBitmap = decodeFromFirebaseBase64(imageString);

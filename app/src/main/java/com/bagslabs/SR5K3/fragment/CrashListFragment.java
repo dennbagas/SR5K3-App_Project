@@ -67,14 +67,15 @@ public abstract class CrashListFragment extends Fragment {
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
 
-        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<AddCrash>()
+        FirebaseRecyclerOptions<AddCrash> options = new FirebaseRecyclerOptions.Builder<AddCrash>()
                 .setQuery(postsQuery, AddCrash.class)
                 .build();
 
         mAdapter = new FirebaseRecyclerAdapter<AddCrash, CrashViewHolder>(options) {
 
+            @NonNull
             @Override
-            public CrashViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public CrashViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
                 return new CrashViewHolder(inflater.inflate(R.layout.crash_item_post, viewGroup, false));
             }

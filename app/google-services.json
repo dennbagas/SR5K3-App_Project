@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381540338793:android:648a34f901695dcc",
+        "android_client_info": {
+          "package_name": "com.bagslabs.SR5K3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381540338793-cr1si79fn5cr8ef78l8ma65f8om3pq0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bagslabs.SR5K3",
+            "certificate_hash": "a5c3d1f86489df356b7573a9f3dddbeadc4b890d"
+          }
+        },
+        {
+          "client_id": "381540338793-j7r4gn29hpoh3k3is8ipq722hv31l9sg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAITneilbDfS9AF_VCVaKHulnSFmm1Wu2Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381540338793-j7r4gn29hpoh3k3is8ipq722hv31l9sg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

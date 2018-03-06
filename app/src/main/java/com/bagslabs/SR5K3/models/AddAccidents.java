@@ -16,14 +16,14 @@ public class AddAccidents {
     public String penanganan;
     public String tanggal;
     public String pukul;
-    public String imageEncoded;
+    public String imageUri;
     public String atasan;
 
     public AddAccidents() {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
     }
 
-    public AddAccidents(String nama, String nik, String bagian, String kronologi, String penanganan, String tanggal, String pukul, String imageEncoded, String atasan) {
+    public AddAccidents(String nama, String nik, String bagian, String kronologi, String penanganan, String tanggal, String pukul, String imageUri, String atasan) {
         this.nama = nama;
         this.nik = nik;
         this.bagian = bagian;
@@ -31,7 +31,7 @@ public class AddAccidents {
         this.penanganan = penanganan;
         this.tanggal = tanggal;
         this.pukul = pukul;
-        this.imageEncoded = imageEncoded;
+        this.imageUri = imageUri;
         this.atasan = atasan;
     }
 
@@ -46,7 +46,7 @@ public class AddAccidents {
         result.put("penanganan", penanganan);
         result.put("tanggal", tanggal);
         result.put("pukul", pukul);
-        result.put("imageUrl", imageEncoded);
+        result.put("imageUri", imageUri);
         result.put("atasan", atasan);
 
         return result;

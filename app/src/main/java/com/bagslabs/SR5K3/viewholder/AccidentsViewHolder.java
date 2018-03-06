@@ -27,8 +27,6 @@ public class AccidentsViewHolder extends RecyclerView.ViewHolder {
         kronologiView = itemView.findViewById(R.id.post_kronologi);
         penangananView = itemView.findViewById(R.id.post_penanganan);
         post_photo = itemView.findViewById(R.id.post_photo);
-
-
     }
 
     public void bindToPost(AddAccidents addAccidents, View.OnClickListener starClickListener) {
@@ -37,6 +35,6 @@ public class AccidentsViewHolder extends RecyclerView.ViewHolder {
         bagianView.setText(addAccidents.bagian);
         kronologiView.setText(addAccidents.kronologi);
         penangananView.setText(addAccidents.penanganan);
-        imageUrl = addAccidents.imageEncoded;
+        imageUrl = addAccidents.imageUri;
     }
 }

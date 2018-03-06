@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+@SuppressWarnings("ALL")
 public class CrashDetailActivity extends BaseActivity {
 
     private static final String TAG = "CrashDetailActivity";
@@ -56,11 +57,13 @@ public class CrashDetailActivity extends BaseActivity {
         // Add value event listener to the post
         // [START post_value_event_listener]
         ValueEventListener postListener = new ValueEventListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get AddCrash object and use the values to update the UI
                 AddCrash addCrash = dataSnapshot.getValue(AddCrash.class);
                 // [START_EXCLUDE]
+                //noinspection ConstantConditions
                 areaView.setText(addCrash.area);
                 problemView.setText(addCrash.problem);
                 causeView.setText(addCrash.cause);

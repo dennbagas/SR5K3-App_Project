@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+@SuppressWarnings("ALL")
 public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
@@ -26,7 +27,9 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public String getUid() {
+        //noinspection ConstantConditions
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 

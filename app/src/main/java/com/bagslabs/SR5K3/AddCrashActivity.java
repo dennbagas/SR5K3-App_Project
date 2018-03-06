@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bagslabs.SR5K3.models.AddCrash;
 import com.bagslabs.SR5K3.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -228,7 +229,12 @@ public class AddCrashActivity extends BaseActivity {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/crash/" + key, postValues);
 
-        mDatabase.updateChildren(childUpdates);
+        mDatabase.updateChildren(childUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
     // [END write_fan_out]
 }

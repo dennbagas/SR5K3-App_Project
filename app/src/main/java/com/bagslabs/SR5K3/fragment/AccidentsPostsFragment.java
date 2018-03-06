@@ -12,10 +12,9 @@ public class AccidentsPostsFragment extends AccidentsListFragment {
         // [START recent_posts_query]
         // Last 100 posts, these are automatically the 100 most recent
         // due to sorting by push() keys
-        Query recentPostsQuery = databaseReference.child("accidents")
-                .limitToFirst(100);
         // [END recent_posts_query]
 
-        return recentPostsQuery;
+        return databaseReference.child("accidents")
+                .limitToFirst(100);
     }
 }

@@ -75,8 +75,9 @@ public abstract class AccidentsListFragment extends Fragment {
 
         mAdapter = new FirebaseRecyclerAdapter<AddAccidents, AccidentsViewHolder>(options) {
 
+            @NonNull
             @Override
-            public AccidentsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public AccidentsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
                 return new AccidentsViewHolder(inflater.inflate(R.layout.accidents_item_post, viewGroup, false));
             }
